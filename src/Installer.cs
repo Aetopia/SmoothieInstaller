@@ -17,7 +17,7 @@ static class Installer
 
     static CancellationTokenSource source = null;
 
-    internal readonly static string InstallationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Smoothie");
+    internal readonly static string InstallationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Smoothie");
 
     internal readonly static string BinariesPath = Path.Combine(InstallationPath, "bin");
 

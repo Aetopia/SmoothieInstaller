@@ -68,7 +68,7 @@ An all in one installer for Smoothie.
 - How can I remove Smoothie Installer's FFmpeg installation?
     - Do the following:
 
-        - Go the following directory, `%LOCALAPPDATA%\Programs\Smoothie\bin`.
+        - Go the following directory, `%APPDATA%\Smoothie\bin`.
 
         - Delete the following:
             - `ffmpeg.exe`
@@ -78,7 +78,7 @@ An all in one installer for Smoothie.
             - `ffplay.exe`
 
 - Where does Smoothie Installer install Smoothie?
-    - Smoothie Installer installs Smoothie to `%LOCALAPPDATA%\Programs\Smoothie`.
+    - Smoothie Installer installs Smoothie to `%APPDATA%\Smoothie`.
 
 ## Building
 1. Download the following:
