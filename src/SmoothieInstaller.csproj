@@ -15,7 +15,7 @@
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <AssemblyTitle>Smoothie Installer</AssemblyTitle>
     <Product>Smoothie Installer</Product>
-    <Copyright>Copyright (C) 2024</Copyright>
+    <Copyright>Copyright (C) 2025</Copyright>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
