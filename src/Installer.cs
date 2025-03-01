@@ -75,7 +75,7 @@ static class Installer
         catch (IOException) { };
         NativeMethods.CopyFile(Assembly.GetExecutingAssembly().Location, path);
 
-        PowerShell.Create().AddScript($"""
+        PowerShell.Create().AddScript($$"""
 $TargetPath = "{InstallationPath}"
 
 $Path = [System.Environment]::GetFolderPath("Programs")
@@ -87,8 +87,9 @@ New-Item -ItemType "Directory" -Path $Path
 $WshShell = New-Object -ComObject "WScript.Shell"
 
 $Shortcut = $WshShell.CreateShortcut("$Path\Smoothie.lnk")
-$Shortcut.TargetPath = "$TargetPath\launch.cmd"
+$Shortcut.TargetPath = "$TargetPath\bin\smoothie-rs.exe"
 $Shortcut.IconLocation = "$TargetPath\bin\smoothie-rs.exe"
+$Shortcut.WindowStyle = 7
 $Shortcut.Description = "Smoothen up your gameplay footage with Smoothie, yum!"
 $Shortcut.Save()
 
@@ -96,11 +97,17 @@ $Shortcut = $WshShell.CreateShortcut("$Path\Smoothie Recipe.lnk")
 $Shortcut.TargetPath = "$TargetPath\recipe.ini"
 $Shortcut.Save()
 
-$Shortcut = $WshShell.CreateShortcut("$([System.Environment]::GetFolderPath("SendTo"))\Smoothie.lnk")
+$oldShortcut = "$([System.Environment]::GetFolderPath("SendTo"))\Smoothie.lnk"
+if (Test-Path $oldShortcut){
+    Remove-Item $oldShortcut
+}
+
+
+$Shortcut = $WshShell.CreateShortcut("$([System.Environment]::GetFolderPath("SendTo"))\&Smoothie.lnk")
 $Shortcut.TargetPath = "$TargetPath\bin\smoothie-rs.exe"
 $Shortcut.Arguments = "--tui -i";
 $Shortcut.Save()
-""").Invoke();
+""".Replace("{InstallationPath}", InstallationPath)).Invoke();
 
         Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Smoothie", false);
         using RegistryKey registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Smoothie", true);
