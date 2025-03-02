@@ -55,7 +55,7 @@ static class Installer
         {
             if (source.IsCancellationRequested) return;
             if (entry.FullName.Equals("smoothie-rs/") || entry.Name.Equals("makeShortcuts.cmd")) continue;
-            string path = Path.Combine(InstallationPath, entry.FullName.Split(new string[] { "smoothie-rs/" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+            string path = Path.Combine(InstallationPath, entry.FullName.Split(["smoothie-rs/"], StringSplitOptions.RemoveEmptyEntries)[0]);
 
             if (entry.Name.Equals("recipe.ini") && File.Exists(path)) continue;
             if (entry.FullName.Last().Equals(Path.AltDirectorySeparatorChar))
@@ -75,7 +75,7 @@ static class Installer
         catch (IOException) { };
         NativeMethods.CopyFile(Assembly.GetExecutingAssembly().Location, path);
 
-        PowerShell.Create().AddScript($$"""
+        PowerShell.Create().AddScript($"""
 $TargetPath = "{InstallationPath}"
 
 $Path = [System.Environment]::GetFolderPath("Programs")
@@ -97,17 +97,14 @@ $Shortcut = $WshShell.CreateShortcut("$Path\Smoothie Recipe.lnk")
 $Shortcut.TargetPath = "$TargetPath\recipe.ini"
 $Shortcut.Save()
 
-$oldShortcut = "$([System.Environment]::GetFolderPath("SendTo"))\Smoothie.lnk"
-if (Test-Path $oldShortcut){
-    Remove-Item $oldShortcut
-}
+$Path = $([System.Environment]::GetFolderPath("SendTo"))
+Remove-Item "$Path\Smoothie.lnk"
 
-
-$Shortcut = $WshShell.CreateShortcut("$([System.Environment]::GetFolderPath("SendTo"))\&Smoothie.lnk")
+$Shortcut = $WshShell.CreateShortcut("$Path\&Smoothie.lnk")
 $Shortcut.TargetPath = "$TargetPath\bin\smoothie-rs.exe"
 $Shortcut.Arguments = "--tui -i";
 $Shortcut.Save()
-""".Replace("{InstallationPath}", InstallationPath)).Invoke();
+""").Invoke();
 
         Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Smoothie", false);
         using RegistryKey registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Smoothie", true);
@@ -127,7 +124,7 @@ $Shortcut.Save()
         try { Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Smoothie"), true); }
         catch (DirectoryNotFoundException) { }
 
-        NativeMethods.DeleteFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SendTo), "Smoothie.lnk"));
+        NativeMethods.DeleteFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SendTo), "&Smoothie.lnk"));
         Registry.CurrentUser.DeleteSubKeyTree(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Smoothie", false);
 
         var value = Environment.GetEnvironmentVariable("Path").Replace(BinariesPath, string.Empty).Trim(';');
